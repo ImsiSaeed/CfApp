@@ -1,0 +1,25 @@
+.md-sidenav-left {
+	width: 250px;
+	max-width: 250px;
+	min-width: 250px;
+}
+
+.no-padding {
+	padding: 0 !important;
+}
+
+.no-margin {
+	margin: 0 !important;
+}
+
+.initial-align {
+	text-align: initial;
+}
+
+.center-align {
+	text-align: center;
+}
+
+*[role="button"] {
+	cursor: pointer;
+}

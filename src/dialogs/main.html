@@ -1,0 +1,27 @@
+<md-dialog aria-label="Main Dialog">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<h2>I'm the modal header</h2>
+			<span flex></span>
+			<md-button class="md-primary">
+				<span>I'm a button</span>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-dialog-content>
+		<md-content class="md-padding">
+			{{ meds.getContent() }}
+		</md-content>
+	</md-dialog-content>
+
+	<md-dialog-actions layout="row">
+		<md-button ng-click="meds.useful()">
+			<span>Useful</span>
+		</md-button>
+		<span flex></span>
+		<md-button class="md-warn" ng-click="meds.notUseful()">
+			<span>NOT Useful</span>
+		</md-button>
+	</md-dialog-actions>
+</md-dialog>
