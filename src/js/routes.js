@@ -5,15 +5,24 @@ angular.module('cf').config([
 			.when('/', {
 				templateUrl: './src/pages/home.html',
 			})
-			.when('/medicines', {
-				templateUrl: './src/pages/medicines.html',
-				controller: 'MedicinesController as meds'
-			})
 
 			.when('/nutrition', {
 				templateUrl: './src/pages/nutrition.html',
 			})
 
+			.when('/fitness', {
+				templateUrl: './src/pages/fitness.html',
+			})
+
+			.when('/appointments', {
+				templateUrl: './src/pages/appointments.html',
+				controller: 'AppointmentController as aptmt'
+			})
+
+			.when('/community', {
+				templateUrl: './src/pages/community.html',
+			})
+			
 			.when('/404', {
 				templateUrl: './src/pages/errors/404.html',
 			})

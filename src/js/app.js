@@ -17,54 +17,147 @@ app.controller('CFController', function ($scope, $rootScope, $mdSidenav, $locati
 	}
 });
 
-app.controller('MedicinesController', function ($mdDialog) {
-	var meds = this;
+app.controller('AppointmentController', function ($mdDialog, AppointmentsService) {
+	var ctrl = this;
 
-	meds.notUseful = function () {
-		console.log('You said it\'s not useful');
-		$mdDialog.hide();
-	};
-
-	meds.useful = function () {
-		console.log('You said it\'s useful');
-		$mdDialog.hide();
-	};
-
-	meds.showModalOne = function (ev) {
-		meds.dialogContent = "HEYYY!!!!!";
-		showDialog(ev);
-	}
-
-	meds.showModalTwo = function (ev) {
-		meds.dialogContent = "THERE!!!!!";
-		showDialog(ev);
-	}
-
-	meds.getContent = function () {
-		return meds.dialogContent;
-	}
-
-	function showDialog(ev, content) {
-		$mdDialog.show({
-			controller: 'MedicinesController as meds',
-			templateUrl: './src/dialogs/main.html',
-			targetEvent: ev,
-			clickOutsideToClose: true,
+	function load() {	
+		AppointmentsService.whenReady(function () {
+			ctrl.appoinments = AppointmentsService.getAllAppointments();
 		})
-		.then(null, function() {
-			console.log('You cancelled the dialog.');
-		});	
 	}
-})
 
-app.config([
-			 '$mdThemingProvider',
-	function ($mdThemingProvider) {
+	load();
+
+	ctrl.delete = function (appointment) {
+		AppointmentsService.deleteAppointment(appointment);
+		load();
+	}
+
+	ctrl.new = function (ev) {
+		$mdDialog.show({
+			controller: 'appointmentModalController as ctrl',
+			templateUrl: './src/pages/appointmentDialog.html',
+			targetEvent: ev,
+			clickOutsideToClose : true
+		}).then(function(data) {
+			AppointmentsService.saveAppointment(data);
+        }, function() {
+			console.log('Cancelled!');
+        });
+	}
+});
+
+app.controller('appointmentModalController', function ($scope, $mdDialog) {
+	var ctrl = this;
+	
+	ctrl.appointment= {};
+
+	$scope.cancel = function () {
+		$mdDialog.cancel();
+	}
+
+	$scope.save = function () {
+		$mdDialog.hide(ctrl.appointment);
+	}
+});
+
+app.config(function ($mdThemingProvider, $mdDateLocaleProvider) {
 		$mdThemingProvider
 			.theme('default')
-			.primaryPalette('teal')
-			.accentPalette('cyan')
+			.primaryPalette('purple')
+			.accentPalette('pink')
 			.warnPalette('orange')
 			.backgroundPalette('grey');
+
+		$mdDateLocaleProvider.formatDate = function(date) {
+			date = date ? date : new Date();
+
+			var day = date.getDate();
+			var monthIndex = date.getMonth();
+			var year = date.getFullYear();
+
+			return day + '/' + (monthIndex + 1) + '/' + year;
+		};
 	}
-]);
+);
+
+app.service('AppointmentsService', function ($http, $filter) {
+	var appointments = undefined;
+	var waiting = [];
+
+	$http.get('./src/data/appointments.json').then(function (data) {
+		if (angular.isDefined(data)) {
+			appointments = data.data;
+			startQueue();
+		}
+	});
+
+	function startQueue() {
+		angular.forEach(waiting, function (func) {
+			func();
+		})
+	}
+
+	return {
+		whenReady: function (callback) {
+			if (!angular.isDefined(appointments)) {
+				waiting.push(callback);
+			} else {
+				callback();
+			}
+		},
+
+		getAllAppointments: function () {
+			return appointments;
+		},
+
+		getAppointment: function (doc) {
+			return $filter('filter')(appointments, {doc : doc}, true)[0];
+		},
+
+		deleteAppointment: function (appointment) {
+			appointments.splice(appointments.indexOf(appointment), 1);
+		},
+
+		saveAppointment: function (appointment) {
+			var existingAppointment = appointments.indexOf(appointment);
+			if (existingAppointment != -1) {
+				appointments[existingAppointment] = appointment;
+			} else {
+				appointments.push(appointment);
+			}
+		}
+	}
+});
+
+app.service('UsersService', function ($http, $filter) {
+	var appointments = undefined;
+	var waiting = [];
+
+	$http.get('./src/data/users.json').then(function (data) {
+		if (angular.isDefined(data)) {
+			appointments = data.data;
+			startQueue();
+		}
+	});
+
+	function startQueue() {
+		angular.forEach(waiting, function (func) {
+			func();
+		})
+	}
+
+	return {
+		whenReady: function (callback) {
+			if (!angular.isDefined(appointments)) {
+				waiting.push(callback);
+			} else {
+				callback();
+			}
+		},
+
+		authenticate: function (user) {
+			return appointments;
+		},
+	}
+})

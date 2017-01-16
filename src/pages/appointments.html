@@ -1,0 +1,43 @@
+<div >
+
+  <md-list-item class="md-3-line" flex ng-repeat="appointment in aptmt.appoinments">
+    <div class="md-list-item-text" >
+      <h3>{{ appointment.doc }}</h3>
+      <small>{{ appointment.remark }}</small>
+      <!-- <md-datepicker ng-model="{{ appointment.time }}" md-placeholder="Enter date" disabled></md-datepicker> -->
+      <p>{{ appointment.date| date:'dd/MM/yyyy' }}</p>
+    </div>
+    <md-menu md-position-mode="target-right target">
+        <md-button class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-icon class="material-icons">delete</md-icon>
+        </md-button>
+
+        <md-menu-content width="4">
+            <span class="md-padding">Are you sure you want to delete?</span>
+            <div layout="row">
+                <md-menu-item flex="50">
+                    <md-button ng-click="aptmt.delete(appointment)">
+                        <md-icon class="material-icons">check</md-icon>
+                        Yes
+                    </md-button>
+                </md-menu-item>
+                <md-menu-item flex="50">
+                    <md-button>
+                        <md-icon class="material-icons">close</md-icon>
+                        No
+                    </md-button>
+                </md-menu-item>
+            </div>
+        </md-menu-content>
+    </md-menu>
+    <md-divider></md-divider>
+  </md-list-item>
+</div>
+
+<div layout="row">
+  <div flex></div>
+  <md-button class="md-fab md-fab-bottom-right" ng-click="aptmt.new($event)">
+    <md-icon class="material-icons">add</md-icon>
+      <!-- New Appointment -->
+  </md-button>
+</div>
