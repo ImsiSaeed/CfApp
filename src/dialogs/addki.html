@@ -1,0 +1,47 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form ng-cloak name="addki">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add KI</h2>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="row" layout-wrap>
+                    <md-input-container flex="100" flex-gt-sm="50">
+                        <label>IMSI</label>
+                        <input type="number" required name="imsi" ng-model="ak.ki.imsi">
+                        <div ng-messages="addki.imsi.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex="100" flex-gt-sm="50">
+                        <label>KI</label>
+                        <input type="text" required name="ki" ng-model="ak.ki.ki">
+                        <div ng-messages="addki.ki.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex="100">
+                        <label>Card Type</label>
+                        <md-select name="card-type" ng-model="ak.ki.cardtype" required>
+                            <md-option value="sim">SIM</md-option>
+                            <md-option value="u-sim">U-SIM</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="ak.reset()">
+                Reset
+            </md-button>
+            <md-button ng-disabled="addki.$invalid" ng-click="ak.save()">
+                Save
+            </md-button>
+            <md-button ng-click="ak.cancel()">
+                Cancel
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
