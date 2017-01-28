@@ -6,25 +6,26 @@
             </div>
         </md-toolbar>
         <md-dialog-content>
+            <md-progress-linear md-mode="query" ng-disabled="!ak.isLoading"></md-progress-linear>
             <div class="md-dialog-content">
                 <div layout="row" layout-wrap>
                     <md-input-container flex="100" flex-gt-sm="50">
                         <label>IMSI</label>
-                        <input type="number" required name="imsi" ng-model="ak.ki.imsi">
+                        <input type="number" required name="imsi" ng-model="ak.ki.imsi" ng-disabled="ak.isLoading">
                         <div ng-messages="addki.imsi.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                     <md-input-container flex="100" flex-gt-sm="50">
                         <label>KI</label>
-                        <input type="text" required name="ki" ng-model="ak.ki.ki">
+                        <input type="text" required name="ki" ng-model="ak.ki.ki" ng-disabled="ak.isLoading">
                         <div ng-messages="addki.ki.$error">
                             <div ng-message="required">This is required.</div>
                         </div>
                     </md-input-container>
                     <md-input-container flex="100">
                         <label>Card Type</label>
-                        <md-select name="card-type" ng-model="ak.ki.cardtype" required>
+                        <md-select name="card-type" ng-model="ak.ki.cardtype" required ng-disabled="ak.isLoading">
                             <md-option value="sim">SIM</md-option>
                             <md-option value="u-sim">U-SIM</md-option>
                         </md-select>
@@ -33,13 +34,13 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
-            <md-button ng-click="ak.reset()">
+            <md-button ng-click="ak.reset()" ng-disabled="ak.isLoading">
                 Reset
             </md-button>
-            <md-button ng-disabled="addki.$invalid" ng-click="ak.save()">
+            <md-button ng-disabled="addki.$invalid || ak.isLoading" ng-click="ak.save()">
                 Save
             </md-button>
-            <md-button ng-click="ak.cancel()">
+            <md-button ng-click="ak.cancel()" ng-disabled="ak.isLoading">
                 Cancel
             </md-button>
         </md-dialog-actions>

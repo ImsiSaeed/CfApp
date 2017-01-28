@@ -4,13 +4,37 @@ var app = angular.module('cp', [
 	'ngMessages'
 ]);
 
-app.controller('AddKIController', function ($mdDialog) {
+app.run([
+			 '$http',
+	function ($http) {
+		$http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
+	}
+]);
+
+app.controller('AddKIController', function ($mdDialog, $http, $mdToast) {
 	var ak = this;
+	ak.isLoading = false;
 
 	ak.ki = {};
 
 	ak.save = function () {
-		console.log(ak.ki);
+		ak.isLoading = true;
+		$http.post('./server.php?t=ak', ak.ki).then(function (data) {
+			ak.isLoading = false;
+			if (angular.isDefined(data)) {
+				$mdToast.show(
+					$mdToast.simple()
+						.hideDelay(3000)
+						.textContent(data.data.response)
+				);
+
+				if (data.data.status == 200) {
+					$mdDialog.hide();
+				}
+			} else {
+				console.log("The server did not respond at all");
+			}
+		})
 	}
 
 	ak.reset = function () {
@@ -32,7 +56,7 @@ app.controller('CPController', function ($scope, $rootScope, $mdSidenav, $locati
 			{
 				templateUrl: './src/dialogs/addki.html',
 				controller: 'AddKIController as ak',
-				clickOutsideToClose: true,
+				clickOutsideToClose: false,
 				targetEvent: ev
 			}
 		);
@@ -43,7 +67,7 @@ app.controller('CPController', function ($scope, $rootScope, $mdSidenav, $locati
 			{
 				templateUrl: './src/dialogs/addki.html',
 				controller: 'AddKIController as ak',
-				clickOutsideToClose: true,
+				clickOutsideToClose: false,
 				targetEvent: ev
 			}
 		);
@@ -54,7 +78,7 @@ app.controller('CPController', function ($scope, $rootScope, $mdSidenav, $locati
 			{
 				templateUrl: './src/dialogs/addki.html',
 				controller: 'AddKIController as ak',
-				clickOutsideToClose: true,
+				clickOutsideToClose: false,
 				targetEvent: ev
 			}
 		);
